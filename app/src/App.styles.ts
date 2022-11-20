@@ -35,7 +35,6 @@ export const InfoArea = styled.div`
         text-align: center;
     }
 `;
-export const InfoButton = styled.button``;
 
 export const GridArea = styled.div`
     flex: 1;
