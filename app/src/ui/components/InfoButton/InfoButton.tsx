@@ -8,7 +8,7 @@ type Props = {
 
 export function InfoButton({ label, icon, onClick }: Props) {
     return (
-        <C.Container>
+        <C.Container onClick={onClick}>
             {icon && (
                 <C.IconArea>
                     <C.Icon src={icon} alt={label} />

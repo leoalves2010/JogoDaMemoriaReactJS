@@ -2,7 +2,7 @@ import * as C from "./InfoItem.styles";
 
 type Props = {
     label: string;
-    value: string;
+    value: number;
 };
 
 export function InfoItem({ label, value }: Props) {
