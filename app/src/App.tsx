@@ -7,6 +7,7 @@ import { InfoButton } from "./ui/components/InfoButton/InfoButton";
 import { GridItemType } from "./types/GridItemType";
 import { items } from "./data/items";
 import { GridItem } from "./ui/components/GridItem/GridItem";
+import { TimeService } from "./services/TimeService";
 
 export default function App() {
     const [playing, setPlaying] = useState<boolean>(false);
@@ -14,6 +15,17 @@ export default function App() {
     const [moveCount, setMoveCount] = useState<number>(0);
     const [shownCount, setShownCount] = useState<number>(0);
     const [gridItems, setGridItems] = useState<GridItemType[]>([]);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            if (playing) {
+                setTimeElapsed((timeElapsed) => timeElapsed + 1);
+            }
+        }, 1000);
+        return () => {
+            clearInterval(timer);
+        };
+    }, [playing, timeElapsed]);
 
     useEffect(() => resetAndCreateGridArea(), []);
 
@@ -56,8 +68,8 @@ export default function App() {
                     <img src={LogoImage} width={200} />
                 </C.LinkImage>
                 <C.InfoArea>
-                    <InfoItem label={"Tempo"} value={timeElapsed} />
-                    <InfoItem label={"Movimentos"} value={moveCount} />
+                    <InfoItem label={"Tempo"} value={TimeService(timeElapsed)} />
+                    <InfoItem label={"Movimentos"} value={moveCount.toString()} />
                 </C.InfoArea>
                 <InfoButton
                     label={"Reiniciar"}
