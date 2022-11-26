@@ -29,7 +29,16 @@ export default function App() {
 
     useEffect(() => resetAndCreateGridArea(), []);
 
-    function handleClickItem(index: number) {}
+    function handleClickItem(index: number) {
+        if (playing && index !== null && shownCount < 2) {
+            let tmpGrid = [...gridItems];
+            if(tmpGrid[index].shown === false && tmpGrid[index].permanentShown === false){
+                tmpGrid[index].shown = true;
+                setShownCount(shownCount => shownCount + 1)
+                setGridItems(tmpGrid);
+            }
+        }
+    }
 
     function resetAndCreateGridArea() {
         setTimeElapsed(0);
@@ -68,8 +77,14 @@ export default function App() {
                     <img src={LogoImage} width={200} />
                 </C.LinkImage>
                 <C.InfoArea>
-                    <InfoItem label={"Tempo"} value={TimeService(timeElapsed)} />
-                    <InfoItem label={"Movimentos"} value={moveCount.toString()} />
+                    <InfoItem
+                        label={"Tempo"}
+                        value={TimeService(timeElapsed)}
+                    />
+                    <InfoItem
+                        label={"Movimentos"}
+                        value={moveCount.toString()}
+                    />
                 </C.InfoArea>
                 <InfoButton
                     label={"Reiniciar"}
