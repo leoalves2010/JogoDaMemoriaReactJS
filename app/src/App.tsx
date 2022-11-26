@@ -17,14 +17,45 @@ export default function App() {
     const [gridItems, setGridItems] = useState<GridItemType[]>([]);
 
     useEffect(() => {
+        if(moveCount > 0 && gridItems.every(item => item.permanentShown === true)){
+            setPlaying(false);
+        }
+    }, [moveCount, gridItems])
+
+    useEffect(() => {
+        if(shownCount === 2){
+            let opened = gridItems.filter(item => item.shown === true);
+            
+            if(opened.length === 2){
+                let tmpGrid = [...gridItems];
+                if(opened[0].item === opened[1].item){
+                    tmpGrid.map(item => {
+                        if(item.shown === true){
+                            item.shown = false;
+                            item.permanentShown = true;
+                        }
+                    })
+                }else{
+                    setTimeout(() => {
+                        tmpGrid.map(item => item.shown = false)
+                    }, 100);
+                }
+                setGridItems(tmpGrid);
+                setShownCount(0);
+                setMoveCount(moveCount => moveCount + 1);
+            }
+        }
+    }, [shownCount, gridItems])
+
+    useEffect(() => {
         const timer = setInterval(() => {
             if (playing) {
                 setTimeElapsed((timeElapsed) => timeElapsed + 1);
             }
         }, 1000);
-        return () => {
-            clearInterval(timer);
-        };
+
+        return () => clearInterval(timer);
+
     }, [playing, timeElapsed]);
 
     useEffect(() => resetAndCreateGridArea(), []);
@@ -35,8 +66,8 @@ export default function App() {
             if(tmpGrid[index].shown === false && tmpGrid[index].permanentShown === false){
                 tmpGrid[index].shown = true;
                 setShownCount(shownCount => shownCount + 1)
-                setGridItems(tmpGrid);
             }
+            setGridItems(tmpGrid);
         }
     }
 
